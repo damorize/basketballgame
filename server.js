@@ -42,14 +42,14 @@ app.post('/updateLevel', (req, res) => {
   // Logoljuk a bejövő adatokat
   console.log("Bejövő adat:", req.body); 
 
-  const { newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto, playerId} = req.body;
+  const { newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto,w,l, playerId} = req.body;
 
-  const query = 'UPDATE players SET lvl = ?, point = ?, rebound = ?, assist = ?, block = ?, steal = ?, yourxp = ?, needxp = ?, matches = ?, skill = ? WHERE id = ?';
+  const query = 'UPDATE players SET lvl = ?, point = ?, rebound = ?, assist = ?, block = ?, steal = ?, yourxp = ?, needxp = ?, matches = ?, skill = ?, w=?,l=? WHERE id = ?';
   
   // Logoljuk a SQL lekérdezést is, hogy lássuk, mi kerül futtatásra
-  console.log("SQL lekérdezés:", query, [newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto, playerId]);
+  console.log("SQL lekérdezés:", query, [newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto,w,l, playerId]);
 
-  db.query(query, [newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto, playerId], (err, result) => {
+  db.query(query, [newLevel, pontok, lepattanok, passzok, vedes, lopas, texp, kellxp, meccsek, fejlesztheto,w,l, playerId], (err, result) => {
     if (err) {
       console.error('Frissítési hiba:', err); // Logoljuk a hibát, ha van
       res.status(500).json({ error: 'Frissítési hiba történt.' });

@@ -1,5 +1,19 @@
+// Kezdeti értékek beállítása
+var kezdetiek = [];
+var kezdeti = -1;
+var negyed = 0;
+var level = 1;
+var skill = 0;
+var yourxp = 0;
+var needxp = 20;
+var statok = [1, 0, 0, 0, 0];
+var alltimestatok = [0, 0, 0, 0, 0];
+var allmatch = 0;
+var isRunningMatch = false;
+var wl = [];
+
 function adatokle() {
-    // Adatok lekérdezése GET metódussal
+    // Adatok lekérése GET metódussal
     fetch('http://localhost:3000/getData')
         .then(response => response.json())
         .then(data => {
@@ -10,12 +24,18 @@ function adatokle() {
         .catch(error => console.error('Hiba történt:', error));
 
     function lekeres(data) {
-        level = data[0].lvl;
-        statok = [data[0].point, data[0].rebound, data[0].assist, data[0].block, data[0].steal];
-        yourxp = data[0].yourxp;
-        needxp = data[0].needxp;
-        allmatch = data[0].matches;
-        skill = data[0].skill;
+        // Ellenőrizzük, hogy a válasz adatokat tartalmaz
+        if (data && data[0]) {
+            level = data[0].lvl;
+            statok = [data[0].point, data[0].rebound, data[0].assist, data[0].block, data[0].steal];
+            yourxp = data[0].yourxp;
+            needxp = data[0].needxp;
+            allmatch = data[0].matches;
+            skill = data[0].skill;
+            wl = [data[0].w, data[0].l];
+        } else {
+            console.error("Nem található adat.");
+        }
     };
 }
 
@@ -37,31 +57,25 @@ function adatokfel() {
             texp: yourxp, 
             kellxp: needxp, 
             meccsek: allmatch, 
-            fejlesztheto: skill
+            fejlesztheto: skill,
+            w: wl[0],
+            l: wl[1]
         })
     })
     .then(response => response.json())
-    .then(data => console.log(data.message))
+    .then(data => {
+        console.log("Szerver válasz:", data);
+        if (data.message) {
+            console.log(data.message);  // Ha a válasz tartalmaz üzenetet, logoljuk
+        }
+    })
     .catch(error => console.error('Hiba történt:', error));
 }
-
-// Kezdeti értékek beállítása
-var kezdetiek = [];
-var kezdeti = -1;
-var negyed = 0;
-var level = 1;
-var skill = 0;
-var yourxp = 0;
-var needxp = 20;
-var statok = [1, 0, 0, 0, 0];
-var alltimestatok = [0, 0, 0, 0, 0];
-var allmatch = 0;
-var isRunningMatch = false;
+setTimeout(() => {statupdate();skillupdate();},1000);
 
 // Kezdeti frissítés
 adatokle();
 
-setTimeout(() => {statupdate();skillupdate();},1000);
 
 // Statok frissítése
 function statupdate() {
@@ -70,7 +84,9 @@ function statupdate() {
     document.getElementById("Assist").innerHTML = statok[2];
     document.getElementById("Block").innerHTML = statok[3];
     document.getElementById("Steal").innerHTML = statok[4];
-    document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} 0W-0L`;
+    document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${0}W-${1}L`;
+    document.getElementById("xpkiir").innerHTML = yourxp + '/'+needxp+' XP';  // Szöveg mindig tartalmazza a "XP" részt
+    document.getElementById("xpmennyiseg").style.width = (yourxp / needxp) * 100 + "%";
     adatokfel();
 }
 
@@ -103,7 +119,7 @@ function spends() { if (skill > 0) { statok[4]++; skill--; skillupdate(); statup
 
 // XP növelés és progress bar frissítése
 function increaseXP() {
-    yourxp += 110;
+    yourxp += 10;
 
     // Ha elértük a szükséges XP-t, szintlépés
     while(yourxp >= needxp) {
@@ -154,7 +170,7 @@ async function start() {
             currentmatch[4]+=current[4];
             document.getElementById("negyed").innerHTML = '1. negyed vége';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
-            await sleep(50);  // 5 mp várakozás az első negyed végén
+            await sleep(1000);  // 5 mp várakozás az első negyed végén
             negyed = 2;
         } else if (width === 50) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
@@ -165,7 +181,7 @@ async function start() {
             currentmatch[4]+=current[4];
             document.getElementById("negyed").innerHTML = 'Félidő';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
-            await sleep(50);  // 5 mp várakozás a félidő végén
+            await sleep(1000);  // 5 mp várakozás a félidő végén
             negyed = 3;
         } else if (width === 75) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
@@ -176,7 +192,7 @@ async function start() {
             currentmatch[4]+=current[4];
             document.getElementById("negyed").innerHTML = '3. negyed vége';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
-            await sleep(50);  // 5 mp várakozás a harmadik negyed végén
+            await sleep(1000);  // 5 mp várakozás a harmadik negyed végén
             negyed = 4;
         } else if (width === 100) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
@@ -191,12 +207,12 @@ async function start() {
             enemypont=getRandomInt(80, 130);
             document.getElementById("negyed").innerHTML = 'Meccs vége';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
-            await sleep(400);
+            await sleep(600);
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">matchstats: point:${currentmatch[0]} rebound:${currentmatch[1]} assist:${currentmatch[2]} block:${currentmatch[3]} steal:${currentmatch[4]}</div>`;
-            await sleep(400);
+            await sleep(600);
             if(yourpont ==enemypont) {yourpont++}
             document.getElementById('negyedstat').innerHTML += `<div>Te ${yourpont}-${enemypont} Enemy</div>`;
-            await sleep(400);
+            await sleep(600);
             document.getElementById("match-start").disabled=false;
             document.getElementById("match-start").style.backgroundColor = "#ffdd57";
             if(yourpont>enemypont){
@@ -221,7 +237,7 @@ async function start() {
         elem.style.width = width + "%";
 
         width++;  // Haladás minden lépés után
-        await sleep(10);  // 100 ms várakozás minden lépés előtt
+        await sleep(100);  // 100 ms várakozás minden lépés előtt
     }
 }
 
