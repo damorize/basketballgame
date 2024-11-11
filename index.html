@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Színes NBA Játékos Kártya</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card-container">
+        <div class="nba-card">
+            <div class="level">LVL: 1</div>
+            <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/201939.png" alt="Játékos Kép">
+            <div class="info">
+                <div class="name">Stephen Curry</div>
+                <div class="position-team">PG - Golden State Warriors</div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-label">Point</div>
+                        <div class="stat-value" id="Point"></div>
+                        <button class="stat-button" id="Point-Up" onclick="spendp()">Upgrade</button>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Rebound</div>
+                        <div class="stat-value" id="Rebound"></div>
+                        <button class="stat-button" id="Rebound-Up" onclick="spendr()">Upgrade</button>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Assist</div>
+                        <div class="stat-value" id="Assist"></div>
+                        <button class="stat-button" id="Assist-Up" onclick="spenda()">Upgrade</button>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Block</div>
+                        <div class="stat-value" id="Block"></div>
+                        <button class="stat-button" id="Block-Up" onclick="spendb()">Upgrade</button>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Steal</div>
+                        <div class="stat-value" id="Steal"></div>
+                        <button class="stat-button" id="Steal-Up" onclick="spends()">Upgrade</button>
+                    </div>
+                </div>
+            </div>
+            <div id="xpkiir">0 XP/20 XP</div>
+            <div id="xp">
+                <div id="xpmennyiseg"></div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="alltime" style="word-spacing: 17px;">PlayedMatches:0 0W-0L</div>
+            <div class="most">Played matches:0</div>
+            <div class="skill">Skill Points: 0</div>
+            <div class="money">Money: 0</div>
+            <div class="button-container">
+                <button class="match-start" id="match-start" onclick="start()">Play Match</button>
+            </div>
+            <div id="negyed">Meccs állás</div>
+            <div id="match">
+                <div id="matchtime"></div>
+            </div>
+            <div id="negyedstat"></div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+/* Alap stílusok */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1d1f27;
+    padding: 10px;
+}
+
+/* Flexbox container, hogy a kártyák egymás mellett helyezkedjenek el */
+.card-container {
+    display: flex;
+    flex-wrap: wrap; /* Ha nem férnek el egymás mellett, akkor alá kerülnek */
+    justify-content: center;
+    gap: 20px; /* Kártyák közötti távolság */
+    width: 100%;
+}
+
+/* .nba-card és .main kártyák */
+.nba-card, .main {
+    width: 100%;
+    max-width: 500px;
+    background: #23252e;
+    border: 3px solid #fdb927;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    color: white;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+}
+
+/* A .nba-card képe */
+.nba-card img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    opacity: 0.85;
+}
+
+/* Kártya információk */
+.nba-card .info {
+    padding: 15px;
+    background-color: #2b2d3a;
+    border-top: 1px solid #444;
+    overflow-y: auto; /* Görgetés engedélyezése */
+}
+
+.nba-card .name, .nba-card .level, .main .skill, .main .money {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fdb927;
+    margin-bottom: 10px;
+}
+
+.nba-card .position-team {
+    font-size: 1rem;
+    color: #b3b3b3;
+    margin-bottom: 10px;
+}
+
+.nba-card .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+.alltime{
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    background: #4a4c5c;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.most{
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    background: #4a4c5c;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.nba-card .stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    background: #4a4c5c;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.nba-card .stat-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffdd57;
+}
+
+.nba-card .stat-button, .main .match-start {
+    padding: 8px 15px;
+    background-color: #ffdd57;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 250px;
+    height: 40px;
+}
+
+.nba-card .stat-button:hover, .main .match-start:hover {
+    background-color: greenyellow;
+}
+
+/* XP és mérkőzés sávok */
+#xp, #match {
+    width: 100%;
+    background-color: #4a4c5c;
+}
+
+#xpmennyiseg, #matchtime {
+    width: 0%;
+    height: 10px;
+    background-color: #ffdd57;
+    text-align: center;
+    line-height: 30px;
+    color: black;
+}
+
+/* Main kártya magasságának csökkentése */
+.main {
+    height: auto;  /* Ne legyen fix magasság, hanem kövesse a tartalmat */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Kisebb magasság beállítása */
+    align-items: center;
+}
+
+/* Tablet nézet */
+@media (max-width: 768px) {
+    .nba-card, .main {
+        max-width: 400px;
+    }
+
+    .nba-card img {
+        max-height: 200px;
+    }
+
+    .nba-card .name, .nba-card .level, .main .skill, .main .money {
+        font-size: 1.4rem;
+    }
+
+    .nba-card .stat-value {
+        font-size: 1rem;
+    }
+
+    .nba-card .stat-button, .main .match-start {
+        max-width: 200px;
+        padding: 8px 10px;
+        height: auto;
+    }
+}
+
+/* Mobil nézet */
+@media (max-width: 480px) {
+    .nba-card, .main {
+        max-width: 100%;
+    }
+
+    .nba-card img {
+        max-height: 150px;
+    }
+
+    .nba-card .name, .nba-card .level, .main .skill, .main .money {
+        font-size: 1.2rem;
+    }
+
+    .nba-card .position-team {
+        font-size: 0.9rem;
+    }
+
+    .nba-card .stat {
+        padding: 5px 10px;
+    }
+
+    .nba-card .stat-value {
+        font-size: 0.9rem;
+    }
+
+    .nba-card .stat-button, .main .match-start {
+        max-width: 180px;
+        padding: 6px 8px;
+        height: auto;
+    }
+}
