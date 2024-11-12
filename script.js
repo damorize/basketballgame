@@ -10,11 +10,12 @@ var statok = [1, 0, 0, 0, 0];
 var alltimestatok = [0, 0, 0, 0, 0];
 var allmatch = 0;
 var isRunningMatch = false;
-var wl = [];
+var wl = [0,0];
+var allstatok=[0,0,0,0,0];
 
 function adatokle() {
     // Adatok lekérése GET metódussal
-    fetch('http://localhost:3000/getData')
+    fetch('http://localhost:3002/getData')
         .then(response => response.json())
         .then(data => {
             lekeres(data);
@@ -33,6 +34,7 @@ function adatokle() {
             allmatch = data[0].matches;
             skill = data[0].skill;
             wl = [data[0].w, data[0].l];
+            allstatok=[data[0].allpoint, data[0].allrebound, data[0].allassist, data[0].allblock, data[0].allsteal];
         } else {
             console.error("Nem található adat.");
         }
@@ -41,7 +43,7 @@ function adatokle() {
 
 function adatokfel() {
     // Adatok frissítése
-    fetch('http://localhost:3000/updateLevel', {
+    fetch('http://localhost:3002/updateLevel', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -59,7 +61,12 @@ function adatokfel() {
             meccsek: allmatch, 
             fejlesztheto: skill,
             w: wl[0],
-            l: wl[1]
+            l: wl[1],
+            allpoint:allstatok[0],
+            allrebound:allstatok[1],
+            allassist:allstatok[2],
+            allblock:allstatok[3],
+            allsteal:allstatok[4],
         })
     })
     .then(response => response.json())
@@ -84,7 +91,7 @@ function statupdate() {
     document.getElementById("Assist").innerHTML = statok[2];
     document.getElementById("Block").innerHTML = statok[3];
     document.getElementById("Steal").innerHTML = statok[4];
-    document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${0}W-${1}L`;
+    document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${wl[0]}W-${wl[1]}L <br> Points:${allstatok[0]} Rebounds:${allstatok[1]} Assists:${allstatok[2]} Blocks:${allstatok[3]} Steals:${allstatok[4]}`;
     document.getElementById("xpkiir").innerHTML = yourxp + '/'+needxp+' XP';  // Szöveg mindig tartalmazza a "XP" részt
     document.getElementById("xpmennyiseg").style.width = (yourxp / needxp) * 100 + "%";
     adatokfel();
@@ -146,6 +153,8 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+
 async function start() {
     var currentmatch=[0,0,0,0,0];
     var enemypont=0;
@@ -157,50 +166,50 @@ async function start() {
     if (isRunningMatch) return;  // Ha már fut egy mérkőzés, ne indítsunk újat
     isRunningMatch = true;
 
+    function cm(){
+        currentmatch[0]+=current[0];
+        currentmatch[1]+=current[1];
+        currentmatch[2]+=current[2];
+        currentmatch[3]+=current[3];
+        currentmatch[4]+=current[4];
+        allstatok[0]+=current[0];
+        allstatok[1]+=current[1];
+        allstatok[2]+=current[2];
+        allstatok[3]+=current[3];
+        allstatok[4]+=current[4];
+    }
+
     let width = 0;
     const elem = document.getElementById("matchtime");
 
     while (width <= 101) {
         if (width === 25) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
-            currentmatch[0]+=current[0];
-            currentmatch[1]+=current[1];
-            currentmatch[2]+=current[2];
-            currentmatch[3]+=current[3];
-            currentmatch[4]+=current[4];
+            cm();
+            document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${wl[0]}W-${wl[1]}L <br> Points:${allstatok[0]} Rebounds:${allstatok[1]} Assists:${allstatok[2]} Blocks:${allstatok[3]} Steals:${allstatok[4]}`;
             document.getElementById("negyed").innerHTML = '1. negyed vége';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
             await sleep(1000);  // 5 mp várakozás az első negyed végén
             negyed = 2;
         } else if (width === 50) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
-            currentmatch[0]+=current[0];
-            currentmatch[1]+=current[1];
-            currentmatch[2]+=current[2];
-            currentmatch[3]+=current[3];
-            currentmatch[4]+=current[4];
+            cm();
+            document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${wl[0]}W-${wl[1]}L <br> Points:${allstatok[0]} Rebounds:${allstatok[1]} Assists:${allstatok[2]} Blocks:${allstatok[3]} Steals:${allstatok[4]}`;
             document.getElementById("negyed").innerHTML = 'Félidő';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
             await sleep(1000);  // 5 mp várakozás a félidő végén
             negyed = 3;
         } else if (width === 75) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
-            currentmatch[0]+=current[0];
-            currentmatch[1]+=current[1];
-            currentmatch[2]+=current[2];
-            currentmatch[3]+=current[3];
-            currentmatch[4]+=current[4];
+            cm();
+            document.querySelector('.alltime').innerHTML = `PlayedMatches:${allmatch} ${wl[0]}W-${wl[1]}L <br> Points:${allstatok[0]} Rebounds:${allstatok[1]} Assists:${allstatok[2]} Blocks:${allstatok[3]} Steals:${allstatok[4]}`;
             document.getElementById("negyed").innerHTML = '3. negyed vége';
             document.getElementById('negyedstat').innerHTML += `<div style="word-spacing: 17px;">${negyed}.negyed: point:${current[0]} rebound:${current[1]} assist:${current[2]} block:${current[3]} steal:${current[4]}</div>`;
             await sleep(1000);  // 5 mp várakozás a harmadik negyed végén
             negyed = 4;
         } else if (width === 100) {
             var current=[(getRandomInt(0, statok[0])),(getRandomInt(0, statok[1])),(getRandomInt(0, statok[2])),(getRandomInt(0, statok[3])),(getRandomInt(0, statok[4]))]
-            currentmatch[0]+=current[0];
-            currentmatch[1]+=current[1];
-            currentmatch[2]+=current[2];
-            currentmatch[3]+=current[3];
-            currentmatch[4]+=current[4];
+            cm();
             allmatch++;
             elem.style.width = 0 + "%";
             yourpont=getRandomInt(80, 130);
